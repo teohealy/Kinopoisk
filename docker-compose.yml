@@ -1,0 +1,29 @@
+version: "3.0"
+services:
+  frontproxy:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    container_name: frontproxy
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./frontend/www/:/usr/share/nginx/html/
+
+  app:
+    build: .
+    container_name: backend
+    restart: always
+    depends_on:
+      - nginx
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    container_name: nginx
+    restart: always
+    ports:
+      - "2000:80"
+  

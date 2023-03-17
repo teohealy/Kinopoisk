@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinopoisk</title>
+</head>
+<body>
+    <h1>Список лучших фильмов</h1>
+    <input type="number" id="limit" min="1" max="50" value="7">
+    <select id="lang">
+        <option value="en" selected="selected">en</option>
+        <option value="rus">rus</option>
+      </select>
+    <button onclick="getTop()">Create</button>
+    <p id="er"></p>
+    <script>
+        function getTop() {
+            var lang = document.getElementById("lang").value
+            var limit = parseInt(document.getElementById("limit").value)
+            var url = 'http://localhost/api?limit=' + limit + '&lang=' + lang
+            fetch(url)
+            .then(response => {
+                if (response.ok === false) {
+                    throw new Error(response.statusText);
+                }
+                return response.json()
+            })
+            .then(data => {
+                var films = data.result.join('<br>')
+                document.getElementById('er').innerHTML = films
+            })
+            .catch(error => {
+                console.error(error)
+                document.getElementById('er').textContent = "Error! Try again with different values"
+            });
+        }
+        </script>
+</body>
+</html>
